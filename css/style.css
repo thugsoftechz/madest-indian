@@ -1,10 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Impact&display=swap');
 
 body {
     margin: 0;
     overflow: hidden;
     background-color: #000;
-    font-family: 'VT323', monospace; /* Retro Terminal Font */
+    font-family: 'VT323', monospace;
     user-select: none;
 }
 
@@ -12,7 +13,49 @@ canvas {
     display: block;
 }
 
-/* HUD */
+/* PS2 / CRT POST PROCESSING SIMULATION */
+body::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    /* Scanlines + Vignette + Chromatic Aberration Fake */
+    background:
+        linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+        radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0,0,0,0.6) 100%);
+
+    z-index: 2;
+    background-size: 100% 4px, 100% 100%;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.9);
+}
+
+/* RGB SPLIT / NOISE */
+body::before {
+    content: " ";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: 3;
+    animation: grain 0.2s steps(4) infinite;
+}
+
+@keyframes grain {
+    0%, 100% { transform: translate(0, 0); }
+    10% { transform: translate(-1%, -1%); }
+    20% { transform: translate(1%, 1%); }
+    30% { transform: translate(-2%, 2%); }
+    40% { transform: translate(2%, -2%); }
+}
+
+/* HUD - ARCADE STYLE */
 #hud {
     position: absolute;
     top: 0;
@@ -20,80 +63,36 @@ canvas {
     width: 100%;
     height: 100%;
     pointer-events: none;
+    z-index: 10;
 }
 
 #crosshair {
     position: absolute;
-    top: 50%;
+    bottom: 30px;
     left: 50%;
-    transform: translate(-50%, -50%);
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 24px;
-    text-shadow: 0 0 2px black;
-}
-
-#objective-text {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    color: #ffcc00; /* Amber */
-    font-size: 28px;
-    text-shadow: 0 0 5px #ffcc00;
+    transform: translateX(-50%);
+    color: #00ff00;
+    font-size: 32px;
+    font-weight: bold;
+    text-shadow: 2px 2px 0px black;
+    font-family: 'Impact', sans-serif;
     letter-spacing: 2px;
 }
 
-#interaction-prompt {
+/* REPLAY OVERLAY */
+#replay-tag {
     position: absolute;
-    top: 55%; /* Slightly below crosshair */
-    left: 50%;
-    transform: translateX(-50%);
-    color: #00ff00; /* Terminal Green */
-    font-size: 20px;
-    display: none; /* Shown via JS */
-    text-shadow: 0 0 5px #00ff00;
-}
-
-/* DIALOGUE - CINEMATIC */
-#dialogue-overlay {
-    position: absolute;
-    bottom: 10%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60%;
-    text-align: center;
-    pointer-events: none;
-}
-
-#dialogue-box {
-    background: rgba(0, 0, 0, 0.8);
-    border: 1px solid #ffffff;
-    padding: 20px;
-    color: white;
-}
-
-#dialogue-speaker {
+    top: 30px;
+    right: 30px;
+    color: #ff0000;
     font-size: 24px;
-    color: #ff0055; /* Neon Pink/Red */
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-#dialogue-text {
-    font-size: 32px;
-    line-height: 1.2;
-    text-shadow: 0 0 2px black;
-}
-
-#dialogue-hint {
-    margin-top: 15px;
-    font-size: 16px;
-    color: #888;
     animation: blink 1s infinite;
+    z-index: 20;
+    text-shadow: 0 0 5px red;
 }
 
 @keyframes blink {
-    0% { opacity: 0.5; }
-    50% { opacity: 1; }
-    100% { opacity: 0.5; }
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
 }

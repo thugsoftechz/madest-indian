@@ -3,28 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUMBAI: EXTRACTION</title>
+    <title>MADEST-INDIAN</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
-    <!-- IMMERSIVE HUD -->
+    <!-- GAME HUD -->
     <div id="hud">
-        <div id="crosshair">+</div>
-        <div id="objective-text">// INITIALIZING...</div>
-        <div id="interaction-prompt">[ E ] INTERACT</div>
+        <div id="crosshair">ADRENALINE: 100%</div>
+        <div id="replay-tag">REC ●</div>
     </div>
 
-    <!-- DIALOGUE OVERLAY (Cinematic Letterbox feel) -->
-    <div id="dialogue-overlay" style="display: none;">
-        <div id="dialogue-box">
-            <div id="dialogue-speaker">UNKNOWN</div>
-            <div id="dialogue-text">...</div>
-            <div id="dialogue-hint">[ E ] NEXT</div>
-        </div>
-    </div>
-
-    <!-- Game Scripts -->
+    <!-- CINEMATIC OVERLAY (Controlled by JS) -->
+    <!-- Scripts -->
     <script src="js/data.js"></script>
     <script src="js/main.js"></script>
 </body>
