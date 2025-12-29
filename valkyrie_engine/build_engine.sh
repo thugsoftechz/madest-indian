@@ -9,6 +9,8 @@ g++ -std=c++17 \
     src/kernel/logger/VSE_Logger.cpp \
     src/kernel/jobsystem/VSE_JobSystem.cpp \
     src/game/StoryData.cpp \
+    src/simulation/CitySystem.cpp \
+    src/simulation/PopulationSystem.cpp \
     -o valkyrie_engine_bin \
     -I.
 

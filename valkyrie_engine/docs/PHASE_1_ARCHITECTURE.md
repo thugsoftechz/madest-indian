@@ -18,9 +18,14 @@ The Valkyrie Synthesis Engine (VSE) operates as a layered architecture:
 *   **Dependencies:** VSE_Core.
 *   **Key Modules:** `VSE_Renderer` (RAL), `VSE_Physics`, `VSE_Audio`, `VSE_Input`.
 
-### Layer 3: Gameplay Framework (VSE_Game)
-*   **Responsibility:** Game Logic, AI, World Streaming, Entities.
+### Layer 3: Simulation Core (VSE_Sim) [NEW]
+*   **Responsibility:** The Living World, 300+ City Management, Macro-Simulation.
 *   **Dependencies:** VSE_Engine.
+*   **Key Modules:** `CitySystem`, `PopulationSystem`, `EcologySystem`, `EconomySystem`.
+
+### Layer 4: Gameplay Framework (VSE_Game)
+*   **Responsibility:** Game Logic, AI, World Streaming, Entities.
+*   **Dependencies:** VSE_Sim.
 *   **Key Modules:** `WorldStreamingSystem`, `AISystem`, `PlayerController`, `NarrativeDirector`.
 
 ## 2. THREADING MODEL (FIBER-BASED JOB SYSTEM)
@@ -31,6 +36,7 @@ The engine utilizes a fixed-thread-pool architecture with fiber-based job schedu
 *   **Dedicated Threads:**
     *   **IO Thread:** Asynchronous file operations (Asset Streaming).
     *   **Audio Thread:** Audio mixing (high priority).
+    *   **Sim Thread:** dedicated to the "Historical Time" loop for background city evolution.
 
 **Synchronization:**
 *   Locks/Mutexes are forbidden in the hot loop.
@@ -46,7 +52,7 @@ Global `new`/`delete` are forbidden.
 *   **Double-Buffered State:** Game state is double-buffered (Current/Previous) to allow interpolation by the renderer.
 
 ## 4. DEPENDENCY GRAPH
-`VSE_Game` -> `VSE_Engine` -> `VSE_Core` -> `VSE_Kernel`
+`VSE_Game` -> `VSE_Sim` -> `VSE_Engine` -> `VSE_Core` -> `VSE_Kernel`
 
 *   Cross-layer communication via Event Bus or direct interface calls (downward).
 *   Upward communication via Callbacks/Delegates only.

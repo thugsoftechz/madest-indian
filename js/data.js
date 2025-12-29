@@ -92,34 +92,44 @@ class NarrativeEngine {
     }
 
     generateWorld() {
-        // Expand database procedurally to 400+ virtual nodes
-        CITY_DB.forEach(c => {
-            this.cities[c.name] = {
-                ...c,
-                config: ARCHETYPES[c.type],
-                connections: this.getConnections(c.name)
-            };
-        });
+        // 1. Collect all city names first
+        this.allCityNames = CITY_DB.map(c => c.name);
 
-        // Procedural fill
+        // Procedural fill names
         const prefixes = ["New", "Old", "South", "North", "Cyber", "Lost", "Neon", "Dust", "Steel", "Dark"];
         const bases = ["City", "Town", "Nagar", "Pur", "Bad", "Ghat", "Vihar", "Kunj", "Lok", "Colony"];
 
         for(let i=0; i<300; i++) {
             const name = `${prefixes[Math.floor(Math.random()*prefixes.length)]} ${bases[Math.floor(Math.random()*bases.length)]} ${i}`;
+            this.allCityNames.push(name);
+
             const type = Object.keys(ARCHETYPES)[Math.floor(Math.random()*4)];
             this.cities[name] = {
                 name: name,
                 type: type,
                 config: ARCHETYPES[type],
                 memory: { en: "A place I haven't been. Yet.", hi: "Ek jagah jahan main abhi tak nahi gaya." },
-                connections: [] // Dynamic
+                // Connections generated later
             };
+        }
+
+        // 2. Hydrate Cities with Data & Connections
+        CITY_DB.forEach(c => {
+            this.cities[c.name] = {
+                ...c,
+                config: ARCHETYPES[c.type],
+            };
+        });
+
+        // 3. Generate Connections for ALL cities
+        for (const name of this.allCityNames) {
+            this.cities[name].connections = this.getConnections(name);
         }
     }
 
     getConnections(name) {
-        return CITY_DB.map(c => c.name).filter(n => n !== name).sort(() => 0.5 - Math.random()).slice(0, 2);
+        // Pick 3 random neighbors from the ENTIRE pool of 300+ cities
+        return this.allCityNames.filter(n => n !== name).sort(() => 0.5 - Math.random()).slice(0, 3);
     }
 
     getCity(name) {
