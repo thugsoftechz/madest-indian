@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #000;
+    font-family: 'VT323', monospace; /* Retro Terminal Font */
+    user-select: none;
+}
+
+canvas {
+    display: block;
+}
+
+/* HUD */
+#hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+#crosshair {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 24px;
+    text-shadow: 0 0 2px black;
+}
+
+#objective-text {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #ffcc00; /* Amber */
+    font-size: 28px;
+    text-shadow: 0 0 5px #ffcc00;
+    letter-spacing: 2px;
+}
+
+#interaction-prompt {
+    position: absolute;
+    top: 55%; /* Slightly below crosshair */
+    left: 50%;
+    transform: translateX(-50%);
+    color: #00ff00; /* Terminal Green */
+    font-size: 20px;
+    display: none; /* Shown via JS */
+    text-shadow: 0 0 5px #00ff00;
+}
+
+/* DIALOGUE - CINEMATIC */
+#dialogue-overlay {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    text-align: center;
+    pointer-events: none;
+}
+
+#dialogue-box {
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid #ffffff;
+    padding: 20px;
+    color: white;
+}
+
+#dialogue-speaker {
+    font-size: 24px;
+    color: #ff0055; /* Neon Pink/Red */
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#dialogue-text {
+    font-size: 32px;
+    line-height: 1.2;
+    text-shadow: 0 0 2px black;
+}
+
+#dialogue-hint {
+    margin-top: 15px;
+    font-size: 16px;
+    color: #888;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { opacity: 0.5; }
+}
